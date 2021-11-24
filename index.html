@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="debug"><p>hi</p></div>
+    <script>
+      fetch("sample.json")
+        .then((response) => response.json())
+        .then((data) => {
+          // A function to read, parse and write JSON data
+          function displayJSONData(obj) {
+            for (let k in obj) {
+              // check if the input `obj` is of type Object
+              // Recusrively call the function with `obj[k]` sub-level
+              if (obj[k] instanceof Object) {
+                displayJSONData(obj[k]);
+              } else {
+                // Write the value on the webpage if it's not of type Object
+                document.write(obj[k] + " ");
+              }
+            }
+          }
+
+          // Parse and Display patient's name info
+          for (let i = 0; i < data["name"].length; i++) {
+            document.write("Name of patient: ");
+            displayJSONData(data["name"][i]["given"]);
+            displayJSONData(data["name"][i]["family"]);
+            document.write("<br>");
+          }
+
+          document.write("<br>");
+
+          // Parse and Display patient's Oraganization info
+          document.write(
+            "Organization name: " +
+              data["managingOrganization"]["display"] +
+              "<br>"
+          );
+
+          document.write("<br>");
+
+          // Parse and Display patient's gender info
+          document.write(
+            "Gender: " +
+              data["gender"].charAt(0).toUpperCase() + // Convert the first letter to Uppercase
+              data["gender"].slice(1) +
+              "<br>"
+          );
+
+          document.write("<br>");
+
+          // Display patient's count of conditions
+          document.write(
+            "Number of conditions they have: " +
+              data["conditions"].length +
+              "<br>"
+          );
+
+          document.write("<br>");
+
+          // Display patient's conditions in an unordered list
+          document.write("List of all conditions: ");
+          document.write("<ul>");
+          for (val in data["conditions"]) {
+            document.write("<li>" + data["conditions"][val] + "</li>");
+          }
+          document.write("</ul>");
+        });
+    </script>
+  </body>
+</html>
